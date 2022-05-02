@@ -33,11 +33,13 @@ def add():
                         "rating": "" }})
     
 
-def remove():
+def remove(index):
     """
-    User removes an album from the dictionary 
+    Deletes the key of the dictionary 
     """
-    
+    del albums[index] 
+    # Does not change the id order of the dictionary list
+    # There's an error when adding a new album, needs to be fixed 
 
 def edit():
     """
@@ -47,13 +49,13 @@ def edit():
 
 def rate(index):
     """
-    User rates each album in the dictionary
+    Updates rating dictionary with user's input 
     """
     albums[index]["rating"] = input('Please rate the album:')
     
 def index():
     """
-    Gets index of album selected by user and returns
+    Gets index of album selected by user and returns it 
     """
     index = int(input("Enter id of album: "))
     return index
@@ -66,7 +68,7 @@ def suggest():
     
 def menu():
     """
-    Menu for navigation 
+    Loops menu 
     """
     menu = True
     while menu:
@@ -84,7 +86,7 @@ def menu():
         elif option == '2':
             edit()
         elif option == '3':
-            remove()
+            remove(index())
         elif option == '4':
             rate(index())
         elif option == '5':
