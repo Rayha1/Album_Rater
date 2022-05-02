@@ -31,17 +31,17 @@ def add():
     num = len(albums)
     albums.update({num:{"title": title, "artist": artist, "genre": genre,
                         "rating": "" }})
-    pass
+    
 
 def remove():
     """
     User removes an album from the dictionary 
     """
-    pass
+    
 
 def edit():
     """
-    User can updates all the details of album 
+    User can updates the details of album 
     """
     pass
 
@@ -57,7 +57,37 @@ def suggest():
     """
     pass
     
-
+def menu():
+    """
+    Menu for navigation 
+    """
+    menu = True
+    while menu:
+        option = input("\nAlbum rater"
+                       "\n1) Add an album"
+                       "\n2) Edit an album"
+                       "\n3) Delete an album"
+                       "\n4) Rate an album"
+                       "\n5) Get a recommendation"
+                       "\n6) Print albums"
+                       "\n0) QUIT"
+                       "\nEnter a option: ")
+        if option == '1':
+            add()
+        elif option == '2':
+            edit()
+        elif option == '3':
+            remove()
+        elif option == '4':
+            rate()
+        elif option == '5':
+            suggest()
+        elif option == '6':
+            print_dictionary(albums)
+        elif option == '0':
+            menu = False
+        else:
+            print("\nInvalid option")
 
 if __name__ == "__main__":
     albums = {1:{"title":"Album1", "artist": "Artist1", "genre": "pop", "rating":""},
@@ -67,3 +97,5 @@ if __name__ == "__main__":
               5:{"title":"Album5", "artist": "Artist5", "genre": "jazz", "rating":""},
               6:{"title":"Album6", "artist": "Artist6", "genre": "jazz", "rating":""}}
     print_dictionary(albums)
+
+    menu()
