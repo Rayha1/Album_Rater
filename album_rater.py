@@ -45,11 +45,18 @@ def edit():
     """
     pass
 
-def rate():
+def rate(index):
     """
     User rates each album in the dictionary
     """
-    albums[index]["rating"] = input('please rate the album:')
+    albums[index]["rating"] = input('Please rate the album:')
+    
+def index():
+    """
+    Gets index of album selected by user and returns
+    """
+    index = int(input("Enter id of album: "))
+    return index
 
 def suggest():
     """
@@ -79,7 +86,7 @@ def menu():
         elif option == '3':
             remove()
         elif option == '4':
-            rate()
+            rate(index())
         elif option == '5':
             suggest()
         elif option == '6':
@@ -90,6 +97,7 @@ def menu():
             print("\nInvalid option")
 
 if __name__ == "__main__":
+    # Album Dictionary 
     albums = {1:{"title":"Album1", "artist": "Artist1", "genre": "pop", "rating":""},
               2:{"title":"Album2", "artist": "Artist2", "genre": "pop", "rating":""},
               3:{"title":"Album3", "artist": "Artist3", "genre": "rock", "rating":""},
@@ -98,4 +106,5 @@ if __name__ == "__main__":
               6:{"title":"Album6", "artist": "Artist6", "genre": "jazz", "rating":""}}
     print_dictionary(albums)
 
+    # Calls menu 
     menu()
