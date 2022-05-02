@@ -14,7 +14,7 @@
 
 def print_dictionary(dictionary):
     for id, song in albums.items():
-        print("ID:{}\ttitle:{}\tartist:{}\tgenre:{}\trating:{}".format(id, song["title"],
+        print("ID:{}\ttitle:{}\tartist:{}\tgenre:{}\trating: {}".format(id, song["title"],
                                                                          song["artist"], song["genre"], song["rating"]))
 
 def add():
@@ -23,9 +23,7 @@ def add():
     genre = input("please enter the song genre: ")
     num = len(albums)
     albums.update({num:{"title": title, "artist": artist, "genre": genre, "rating": "" }})
-    
-    
-    pass
+
 
 def remove():
     pass
@@ -33,8 +31,9 @@ def remove():
 def edit():
     pass
 
-def rate():
-    pass
+def rate(index):
+    albums[index]["rating"] = input('please rate the album:')
+
 
 def suggest():
     pass
