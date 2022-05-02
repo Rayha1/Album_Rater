@@ -21,7 +21,8 @@ def add():
     title = input("please enter the album name: ")
     artist = input("please enter the name of the artist: ")
     genre = input("please enter the song genre: ")
-    rating = input("please enter the song name: ")
+    num = len(albums)
+    albums.update({num:{"title": title, "artist": artist, "genre": genre, "rating": "" }})
     
     
     pass
