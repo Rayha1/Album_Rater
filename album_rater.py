@@ -1,200 +1,270 @@
 ##
 # album_rater.py
 # Album rater program that allows user to add, edit, delete, rate albums
-# made with collaboration with Sydney :))
-##
-# made with collaboration with Rayha :))
-# 03/05/22 
-
-# make a album rater program
-# an album contains a title, artist, genre and rating
-# you should allow the user to add, edit, delete and rate the album
-# YOU MUST HAVE FUN BUILDING THIS :)
+# Made with collaboration with Rayha :))
+# 03/05/22
 
 
-def print_dictionary(dictionary):
+def print_albums(dictionary):
     """
     Takes in the dictionary
-    Prints the album details nicely in the dictionary 
-    Prints the album details in the dictionary tidy
+    Prints the album details nicely in the dictionary
     """
+
+    # Checks if there aren't albums in the dictionary
+    if len(albums) < 1:
+        print("\nYOU HAVE NO ALBUMS")
+        print("press 1 to add an album")
+
+    # For values and keys in dictionary prints out organised
     for id, song in albums.items():
-        print("ID:{}\ttitle:{}\tartist:{}\tgenre:{}\trating: {}".format(id, song["title"],
-                                                                         song["artist"], song["genre"], song["rating"]))
+        print("ID:{}\ttitle:{}\tartist:{}\tgenre:{}\trating:{}"
+              .format(id, song["title"], song["artist"], song["genre"],
+                      song["rating"]))
+
 
 def add():
     """
     Takes user input album details as variables
-    Updates into the dictionary 
-    User adds new album details into the dictionary using update 
+    Updates into the dictionary
     """
-    title = check(input("please enter the album name: ")).strip().title()
-    artist = check(input("please enter the name of the artist: ")).strip().title()
-    genre = check(input("please enter the song genre: ")).strip().lower()
-    num = len(albums)+1
-    albums.update({num:{"title": title, "artist": artist, "genre": genre, "rating": "" }})
+
+    ADDED_ALBUM = 1
+
+    # Gets user input of album details into variables
+    title = check(input("please enter the album name: ")).title()
+    artist = check(input("please enter the name of the artist: ")).title()
+    genre = check(input("please enter the song genre: ")).title()
+
+    # Finds the number ID
+    num = len(albums) + ADDED_ALBUM
+
+    # Updates into the dictionary
+    albums.update({num: {"title": title, "artist": artist, "genre": genre,
+                         "rating": ""}})
+
+    print("Sucessfully added album")
     print("\n{} has been added to the album list!".format(title))
 
-def check(lenght):
+
+def check(length):
+    """
+    Checks the length of input and returns
+    """
+
+    NO_INPUT = 0
     while True:
-        if len(lenght) > 0:
-            return lenght
+        # Checks the length of the input for input
+        if len(length) > NO_INPUT:
+            return length
         else:
+            # Error message because no input
             print("you have entered nothing")
-            lenght = input("please enter something:")
-            
-        
-    
+            length = input("Please enter something:")
+
 
 def remove(index):
     """
     Takes in the id index as the key
-    Deletes the key of the dictionary 
-    User removes an album from the dictionary 
+    Deletes the key of the dictionary
     """
-    del albums[index]
-    title = albums[index]["title"]
-    print("\n{} has been removed to the album list!".format(title))
 
-    
+    # deletes the index from the dictionary
+    del albums[index]
+    print("Sucessfully removed album ID {}".format(index))
+
+
 def edit(index):
     """
-    User can updates the details of album 
-    User can updates all the details of album 
+    User can updates the details of album
     """
-    title = check(input("please enter the fixed album name: ")).strip().title()
-    artist = check(input("please enter the fixed name of the artist: ")).strip().title()
-    genre = check(input("please enter the fixed song genre: ")).strip().title()
-    albums.update({index:{"title": title, "artist": artist, "genre": genre, "rating": "" }})
-    print("album", index, "has been updated!")
+
+    # Gets user input of fixed album details as variables
+    title = input("please enter the fixed album name: ").title()
+    artist = input("please enter the fixed name of the artist: ").title()
+    genre = input("please enter the fixed song genre: ").title()
+
+    # Updates into dictionary
+    albums.update({index: {"title": title, "artist": artist,
+                           "genre": genre, "rating": ""}})
+
+    print("Album {} has been edited".format(index))
 
 
 def rate(index):
     """
-    Gets user input index of album selected 
-    Returns it 
-    User rates each album in the dictionary
+    Takes in index of the selected album
+    Updates the rating that album in the dictionary
     """
-    while True:
-        rating = int(input('please rate the album from 1 to 10:'))
-        if rating < 1 or rating > 10:
-            print("invalid number")
+
+    RATING_MIN = 1
+    RATING_MAX = 10
+
+    user_rating = True
+    # Loop
+    while user_rating:
+
+        # Asks for user input rating
+        rating = int(input('Please rate the album out of 10:'))
+
+        # Checks if rating isn't in range from 1-10
+        if rating < RATING_MIN or rating > RATING_MAX:
+            print("Rating must be from 1-10")
+
         else:
+            # Adds the rating into dictionary
             albums[index]["rating"] = rating
-            print("you have rated the album {}".format(rating))
-            break
-        
+
+            print("Rating added")
+            print("You have rated album ID {}, {}".format(index, rating))
+
+            # Breaks loop
+            user_rating = False
+
+    # Suggests another album to user
     genre = albums[index]["genre"]
     flag = True
     suggest(genre, flag)
 
 
+def index():
+    """
+    Gets user input index of album selected
+    Returns it
+    """
+
+    # Loop
+    while True:
+        try:
+
+            # Gets user input of album id and stores as index
+            index = int(input("Enter id of album: ")
+                        )
+            # Checks if it is a valid id in the dictionary
+            if index in albums:
+                return index
+
+            # Album Id isn't in dictionary
+            else:
+                print("Please enter the ID(number)of album")
+
+        except ValueError:
+            print("Invalid input. Please enter the ID(number)of album")
+
+
 def suggest(reccomend, flag):
     """
-    Suggests another album based on the highest rating album's genre 
+    Suggests another album the the same genere as the one rated
     """
+
     suggesting = flag
     while suggesting:
+
+        # Loops through the indexs and generes in albums dictionary
         for index, genre in albums.items():
+
+            # If genre matches the one rated
             if albums[index]["genre"] == reccomend:
+
+                # Stores the album matching the genre as the recommendation
                 reccomendation = albums[index]["title"]
                 suggesting = False
                 recc = True
-                
-    if recc == True:
-        print("you might like {}".format(reccomendation))
-    else:
-        print("this song has a genre not on the list\n"
-              "so we cannot reccomend you anyhting")
-        
 
-def index():
-    while True:
-        try:
-            index = int(input("Enter id of album: "))
-            if index in albums:
-                return index
-        except ValueError:
-            print("please enter the ID number(number)of an album")
+    if recc is True:
+
+        # Suggests the recomended album
+        print("You might like album {}".format(reccomendation))
+
+    else:
+        # No genre of the same rated
+        print("This song has a genre not on the list\n"
+              "So we cannot reccomend you anyhting")
+
 
 def menu():
     """
-    Loops menu 
+    Prints out menu
     """
-    # Prints out menu and asks for user input
+
+    # Prints out menu tidy
     print("\nAlbum rater"
           "\n1) Add an album"
           "\n2) Edit an album"
           "\n3) Delete an album"
           "\n4) Rate an album"
           "\n5) Print albums"
-          "\n0) QUIT"
-          "\nEnter a option: ")
+          "\n0) QUIT")
+
 
 # Main Routine
 if __name__ == "__main__":
 
-    # Album Dictionary 
-    albums = {1:{"title":"Album1", "artist": "Artist1", "genre": "pop", "rating":""},
-              2:{"title":"Album2", "artist": "Artist2", "genre": "pop", "rating":""},
-              3:{"title":"Album3", "artist": "Artist3", "genre": "rock", "rating":""},
-              4:{"title":"Album4", "artist": "Artist4", "genre": "rock", "rating":""},
-              5:{"title":"Album5", "artist": "Artist5", "genre": "jazz", "rating":""},
-              6:{"title":"Album6", "artist": "Artist6", "genre": "jazz", "rating":""}}
-    ERROR_MESSAGE = print("\nYOU HAVE NO ALBUMS"
-                          "press 1 to add an album")
+    # Album Dictionary
+    albums = {}
 
-    # Calls menu 
-    while True:
+    # Checks if there are albums in dictionary
+    ALBUM_MIN = 0
+
+    # Prints album details nicely
+    print_albums(albums)
+
+    program = True
+    # Loops menu/program
+    while program:
+
+        # Calls menu
         menu()
-        try:
-            option = int(input("please enter a number from the menu: "))
-            if option == 1:
-                # User adds a album
-                add()
 
+        # Asks user for input for what to do
+        option = input("\nPlease enter a number option from the menu: ")
 
-            elif option == 2:
-                # User edits a album
-                if len(albums) > 0:
-                    num = index()
-                    edit(num)
-                else:
-                    ERROR_MESSAGE
-                    
+        if option == '1':
+            # User adds a album
+            add()
 
-            elif option == 3:
-                # Takes in index of a album and removes it
-                if len(albums) > 0:
-                    num = index()
-                    remove(num)
-                else:
-                    ERROR_MESSAGE
-                    
+        elif option == '2':
+            # If dictionary has albums, takes the id and edits it
+            if len(albums) > ALBUM_MIN:
+                num = index()
+                edit(num)
 
-            elif option == 4:
-                # Takes in index of a album and user rates it
-                if len(albums) > 0:
-                    num = index()
-                    rate(num)
-                else:
-                    ERROR_MESSAGE
-
-            elif option == 5:
-                # Prints out album details nicely
-                if len(albums) > 0:
-                    print_dictionary(albums)
-                else:
-                    ERROR_MESSAGE
-
-            elif option == 0:
-                # Breaks loop/menu
-                print("bye")
-                exit()
-
+            # If dictionary empty
             else:
-                # Invalid input 
-                print("\nInvalid option")
-        except ValueError:
-            print("###please enter an interger###")
+                print("\nYOU HAVE NO ALBUMS")
+                print("press 1 to add an album")
 
+        elif option == '3':
+            # If there are albums and removes it
+            if len(albums) > ALBUM_MIN:
+                num = index()
+                remove(num)
+
+            # If dictionary empty
+            else:
+                print("\nYOU HAVE NO ALBUMS")
+                print("press 1 to add an album")
+
+        elif option == '4':
+            # Takes in index of a album and user rates it
+            if len(albums) > ALBUM_MIN:
+                num = index()
+                rate(num)
+
+            # If dictionary empty
+            else:
+                print("\nYOU HAVE NO ALBUMS")
+                print("press 1 to add an album")
+
+        elif option == '5':
+            # Prints out album details nicely
+            print_albums(albums)
+
+        elif option == '0':
+            # Breaks loop/menu
+            print("Thankyou for using album rater :) goodbye")
+            program = False
+
+        else:
+            # Invalid input
+            print("\nInvalid option, please select from the menu")
