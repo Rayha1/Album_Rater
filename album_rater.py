@@ -18,9 +18,6 @@ def print_dictionary(dictionary):
     Prints the album details nicely in the dictionary 
     Prints the album details in the dictionary tidy
     """
-    if len(albums) < 1:
-        print("\nYOU HAVE NO ALBUMS")
-        print("press 1 to add an album")
     for id, song in albums.items():
         print("ID:{}\ttitle:{}\tartist:{}\tgenre:{}\trating: {}".format(id, song["title"],
                                                                          song["artist"], song["genre"], song["rating"]))
@@ -31,12 +28,23 @@ def add():
     Updates into the dictionary 
     User adds new album details into the dictionary using update 
     """
-    title = input("please enter the album name: ").strip().title()
-    artist = input("please enter the name of the artist: ").srip().title()
-    genre = input("please enter the song genre: ").strip().lower()
+    title = check(input("please enter the album name: ")).strip().title()
+    artist = check(input("please enter the name of the artist: ")).strip().title()
+    genre = check(input("please enter the song genre: ")).strip().lower()
     num = len(albums)+1
     albums.update({num:{"title": title, "artist": artist, "genre": genre, "rating": "" }})
     print("\n{} has been added to the album list!".format(title))
+
+def check(lenght):
+    while True:
+        if len(lenght) > 0:
+            return lenght
+        else:
+            print("you have entered nothing")
+            lenght = input("please enter something:")
+            
+        
+    
 
 def remove(index):
     """
@@ -44,7 +52,9 @@ def remove(index):
     Deletes the key of the dictionary 
     User removes an album from the dictionary 
     """
-    del albums[index] 
+    del albums[index]
+    title = albums[index]["title"]
+    print("\n{} has been removed to the album list!".format(title))
 
     
 def edit(index):
@@ -52,10 +62,11 @@ def edit(index):
     User can updates the details of album 
     User can updates all the details of album 
     """
-    title = input("please enter the fixed album name: ")
-    artist = input("please enter the fixed name of the artist: ")
-    genre = input("please enter the fixed song genre: ")
+    title = check(input("please enter the fixed album name: ")).strip().title()
+    artist = check(input("please enter the fixed name of the artist: ")).strip().title()
+    genre = check(input("please enter the fixed song genre: ")).strip().title()
     albums.update({index:{"title": title, "artist": artist, "genre": genre, "rating": "" }})
+    print("album", index, "has been updated!")
 
 
 def rate(index):
@@ -93,7 +104,7 @@ def suggest(reccomend, flag):
     if recc == True:
         print("you might like {}".format(reccomendation))
     else:
-        print("this song has a genre no on the list\n"
+        print("this song has a genre not on the list\n"
               "so we cannot reccomend you anyhting")
         
 
@@ -130,45 +141,60 @@ if __name__ == "__main__":
               4:{"title":"Album4", "artist": "Artist4", "genre": "rock", "rating":""},
               5:{"title":"Album5", "artist": "Artist5", "genre": "jazz", "rating":""},
               6:{"title":"Album6", "artist": "Artist6", "genre": "jazz", "rating":""}}
+    ERROR_MESSAGE = print("\nYOU HAVE NO ALBUMS"
+                          "press 1 to add an album")
 
     # Calls menu 
     while True:
         menu()
-        option = int(input("please enter a number from the menu: "))
-        if option == 1:
-            # User adds a album
-            add()
+        try:
+            option = int(input("please enter a number from the menu: "))
+            if option == 1:
+                # User adds a album
+                add()
 
 
-        elif option == 2:
-            # User edits a album
-            num = index()
-            edit(num)
+            elif option == 2:
+                # User edits a album
+                if len(albums) > 0:
+                    num = index()
+                    edit(num)
+                else:
+                    ERROR_MESSAGE
+                    
 
-        elif option == 3:
-            # Takes in index of a album and removes it
-            if len(albums) > 0:
-                num = index()
-                remove(num)
+            elif option == 3:
+                # Takes in index of a album and removes it
+                if len(albums) > 0:
+                    num = index()
+                    remove(num)
+                else:
+                    ERROR_MESSAGE
+                    
+
+            elif option == 4:
+                # Takes in index of a album and user rates it
+                if len(albums) > 0:
+                    num = index()
+                    rate(num)
+                else:
+                    ERROR_MESSAGE
+
+            elif option == 5:
+                # Prints out album details nicely
+                if len(albums) > 0:
+                    print_dictionary(albums)
+                else:
+                    ERROR_MESSAGE
+
+            elif option == 0:
+                # Breaks loop/menu
+                print("bye")
+                exit()
+
             else:
-                print("\nYOU HAVE NO ALBUMS")
-                print("press 1 to add an album")
-                
+                # Invalid input 
+                print("\nInvalid option")
+        except ValueError:
+            print("###please enter an interger###")
 
-        elif option == 4:
-            # Takes in index of a album and user rates it
-            num = index()
-            rate(num)
-
-        elif option == 5:
-            # Prints out album details nicely 
-            print_dictionary(albums)
-
-        elif option == 0:
-            # Breaks loop/menu
-            print("bye")
-            exit()
-
-        else:
-            # Invalid input 
-            print("\nInvalid option")
